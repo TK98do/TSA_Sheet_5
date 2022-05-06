@@ -22,20 +22,55 @@ output: html_document
 
 ## Problem 17 
 
+The monthly time series seems to follow a linear trend (see figure below) and 
+yearly seaonsal patterns. A linear OLS estimate is applied to estimate the linear trend in price increases. 
+
+OLS: 
+
+$y_t = \hat{\beta}_0 + \hat{\beta}_1 t + \varepsilon$
+
+From slide 5/40, we get $p = 1$ and therefore $\Delta^2 m_t = 0$.
+
 ```{r}
+pacman:: p_load(stats)
+```
+
+
+
+```{r}
+# load data and create TS for monthly data
 df <- read.table(file = "Transport.txt")
+df <- ts(data = df, start = 1993,  deltat = 1/12, names = "Transport")
 
-plot(y =  df$V1,  x = seq(1, length(df$V1)), type = "l")
-index <- seq(1:length(df$V1))
+t <- time(df) 
 
+# use a linear regression model to predict the plot
 
-df <- cbind(df, index)
+reg_0 <- lm(df ~ t ) # Model a quadratic trend wrt time t
+
+# Plot the time series with the fit line
+plot(df, type = "l", main = "Plot of the Time Series")
+points(t, predict.lm(reg_0), type = 'l', col = 'red')
 ```
 
 ```{r}
-hist(df$V1)
-spectrum(df$V1)
-qqnorm(df$V1, pch = 1, frame = FALSE)
-qqline(df$V1, col = "steelblue", lwd = 2)
+plot(reg_0) # residuals are not normally distributed due to seasonality
+
 ```
+
+
+Now, we create a high- pass difference filter with respect to the fitted values
+of the OLS estimators created above. This will eliminate the trend and keep the 
+seasonality. 
+
+```{r}
+a <- sort(predict.lm(reg_0), decreasing = T)
+
+f <- filter(df, filter = predict.lm(reg_0), method = "recursive")
+
+plot(f)
+```
+
+
+
 
