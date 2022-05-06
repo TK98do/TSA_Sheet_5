@@ -5,4 +5,37 @@ date: "5 May 2022"
 output: html_document
 ---
 
+## Problem 14 (Linear Filter)
+
+### 1. *In what sense is a linear filter linear?*
+
+### 2. 
+
+### 3. What is the advantage of a causal filter over a non- causal filter
+
+- Causal filters have real- time applications while non- causal filters cannot be observed using real data.
+
+- Non- causal filters possibly use data from future time periods which are not observable. 
+
+## Problem 15 ()
+
+
+## Problem 17 
+
+```{r}
+df <- read.table(file = "Transport.txt")
+
+plot(y =  df$V1,  x = seq(1, length(df$V1)), type = "l")
+index <- seq(1:length(df$V1))
+
+
+df <- cbind(df, index)
+```
+
+```{r}
+hist(df$V1)
+spectrum(df$V1)
+qqnorm(df$V1, pch = 1, frame = FALSE)
+qqline(df$V1, col = "steelblue", lwd = 2)
+```
 
