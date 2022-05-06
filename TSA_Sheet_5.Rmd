@@ -32,7 +32,7 @@ $y_t = \hat{\beta}_0 + \hat{\beta}_1 t + \varepsilon$
 From slide 5/40, we get $p = 1$ and therefore $\Delta^2 m_t = 0$.
 
 ```{r}
-pacman:: p_load(stats)
+pacman:: p_load(stats, TSA)
 ```
 
 
@@ -64,11 +64,29 @@ of the OLS estimators created above. This will eliminate the trend and keep the
 seasonality. 
 
 ```{r}
-a <- sort(predict.lm(reg_0), decreasing = T)
+a <- sort(predict.lm(reg_0), decreasing = F)
 
-f <- filter(df, filter = predict.lm(reg_0), method = "recursive")
+f <- c(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 
-plot(f)
+f <- append(f, a[13:length(a)])# high pass filter?
+f <- ts(data = f, start = 1993,  deltat = 1/12, names = "High- pass filter")
+
+#plot(f)
+
+
+z <- (df[13:length(df)] - f[13:length(f)])
+z <- ts(data = z, start = 1994,  deltat = 1/12, names = "Detrended")
+
+
+plot(z, type = "l")
+
+periodogram(z)
+
+```
+Create low- pass filter to filter out seasonal effects. We choose a $\lambda = 1/12$. 
+
+```{r}
+
 ```
 
 
