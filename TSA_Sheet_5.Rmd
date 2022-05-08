@@ -19,6 +19,46 @@ output: html_document
 
 ## Problem 15 (Combining Linear Filters)
 
+```{r}
+pacman:: p_load(ZIM, tseries)
+
+B <- function(y, k){
+  if (k >= 0){
+    z <- rep(NaN, rep = k)
+    for (t in (k+1):length(y)){
+      z[t] <- y[t - k]
+    }
+  }
+  else {
+    z <- c()
+    for (t in 1:length(y + k)){
+      z <- append(z, y[t - k])
+    }
+   # z <- append(as.vector(z), rep(NaN, rep = -k))
+  }
+  return(z)
+}
+
+V <- function(y){
+  return(0.2 * B(y, k = -1) + 0.6 + 0.2 * B(y, k = 1))
+}
+
+W <- function(y){
+  return(1- B(y, k = 5))
+}
+
+
+AP <- AirPassengers
+
+plot(AP)
+
+AP_new <- W(AP)
+plot(AP_new, type = "l")
+
+```
+
+
+
 ### a)
 
 *What could be the use of applying each of the two filters to a time series* ($y_t: t \in \Z$)
@@ -26,6 +66,16 @@ output: html_document
 - The second filter can be used to filter out seasonal differences of a frequency of five. 
 
 
+
+### b) 
+
+- V first, then W. 
+- V increases the number of observations in the time series while W reduces them. 
+
+
+### c)
+
+Use convolution of linear filters
 
 
 ## Problem 17 
@@ -73,16 +123,12 @@ f <- c(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 f <- append(f, a[13:length(a)])# high pass filter?
 f <- ts(data = f, start = 1993,  deltat = 1/12, names = "High- pass filter")
 
-#plot(f)
-
-
 z <- (df[13:length(df)] - f[13:length(f)])
 z <- ts(data = z, start = 1994,  deltat = 1/12, names = "Detrended")
 
-
 plot(z, type = "l")
 
-periodogram(z)
+spectrum(z)
 
 ```
 Create low- pass filter to filter out seasonal effects. We choose a $\lambda = 1/12$. 
@@ -91,6 +137,9 @@ Seasonal differencing $\Delta_l := y_t - y_{t-l},\, l = 12$
 
 ```{r}
 # Define differencing function
+
+
+
 
 
 # use for seasonal filter
@@ -102,13 +151,14 @@ d <- function(df, l){
   return(a)
 }
 
-new <- d(df, 1)
+new <- d(df,1)
 new_2 <-d(df, 3)
 plot(df)
 plot(new)
 spectrum(new)
 spectrum(df)
 
+z_new <- d(z,1.1 )
 ```
 
 
