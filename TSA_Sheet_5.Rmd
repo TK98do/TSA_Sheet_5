@@ -19,9 +19,21 @@ output: html_document
 
 ## Problem 15 (Combining Linear Filters)
 
+### a)
+
+#### Define and test functions: 
+
+- $B^k{y_t}  = y_{t-k},$ for $k \in Z$;
+
+- $V  = 0.2 B^{-1} + 0.6 + 0.2 B$;
+
+- $W  = \Delta_5 = 1- B^5$
+
+
 ```{r}
 pacman:: p_load(ZIM, tseries)
 
+# define a function for the backshift operator which takes also negative values
 B <- function(y, k){
   if (k >= 0){
     z <- rep(NaN, rep = k)
@@ -34,7 +46,6 @@ B <- function(y, k){
     for (t in 1:length(y + k)){
       z <- append(z, y[t - k])
     }
-   # z <- append(as.vector(z), rep(NaN, rep = -k))
   }
   return(z)
 }
