@@ -98,7 +98,7 @@ conv_2 <- V(conv_2)
 # Plot the data 
 plot(conv_1, type = "l", col = "red",
      main = "Convolution of Linear Filters",
-     xlab = "Time", ylab = "Convulution output") + 
+     xlab = "Time", ylab = "Convolution output") + 
      lines(conv_2, col = "blue", lty = 2)
 ```
 
@@ -110,16 +110,24 @@ reinforce the principle of commutativity stated above.
 
 Using the results from part b), we define $U = V \circ W = W \circ V$
 
+The corresponding weights are calculated by
+
+\begin{align}
+u_k = \sum_{\forall j} v_j w_{k-j} 
+\end{align}
 
 ### d) *Find a linear filter * $\tilde{W}$ *such that* $W = \Delta \circ \tilde{W}$ 
 
-Define $S = \Delta^{-1} = 1 + B + B^2 +\dots$ as the inverse of $\Delta$ such that 
+Define 
+$S = \Delta^{-1} = 1 + B + B^2 +\dots = \sum_{j=0}^{\infty} B^j$ as the inverse of 
+$\Delta$ such that 
 $S \circ \Delta = 1$. Then, we have 
 
 \begin{align}
  W  & = \Delta \circ \tilde{W}\\
  \therefore S \circ W &  = S \circ \Delta \circ \tilde{W}\\
  = S \circ W &  = \tilde{W}\\
+ = \tilde{W} & =  (\sum_{j=0}^{\infty} B^j) \circ (1- B^5)
 \end{align}
 
 ## Problem 16
@@ -152,7 +160,7 @@ From slides chapter 7, slide 4/40:
 Eliminate the trend by successively differencing global polynomial trends. 
 As we have established above, the the prices most likely follow a linear trend. 
 
-Apllying theorem 7.1: 
+Applying theorem 7.1: 
 
 $y_t = m_t + u_t,\, m_t = \beta_0 + \beta_1t^p$, where $p = 1$. 
 
@@ -163,14 +171,14 @@ We thus choose a high pass filter of
 
 $\Delta^r = \Delta^{p+1} = \Delta^2 = (1- B)^2$
 
-The thus detrended time series is shown in the figure below. 
+The such detrended time series is shown in the figure below. 
 
-### Eliminate seasonality with a Low- Pass Filter
+### Eliminate Seasonality with a Low- Pass Filter
 
-We have monthly data over several years. There is a price increase every January, 
-thus we assume that the prices follow a yearly seasonal pattern. Thus the period for a
+We have monthly data over several years. There is a price increase every January,
+we assume that the prices follow a yearly seasonal pattern. Hence, the period for a
 season is $l = 12$ months. The low pass filter differences the time series with 
-a lag of $l$ and is thus defined as follows: 
+a lag of $l$ and is defined as follows: 
 
 $\Delta_l = \Delta_{12}= 1- B_{12}$. 
 
